@@ -31,6 +31,38 @@ server::server(const std::string& address, const std::string& port,
     start_accept();
 }
 
+void server::run()
+{
+    io_service_.run();
+}
+
+void server::start_accept()
+{
+    new_connection_.reset(new connection(io_service_, 
+                connection_manager_, request_handler_));
+    acceptor_.async_accept(new_connection_->socket(),
+            boost::bind(&server::handle_accept, this, 
+                boost::asio::placeholders::error));
+}
+
+void server::handle_accept(const boost::system::error_code& error)
+{
+    if (!acceptor_.is_open()) {
+        return;
+    }
+    if (!error) {
+        connection_manager_.start(new_connection_);
+    }
+
+    start_accept();
+}
+
+void server::handle_stop()
+{
+    acceptor_.close();
+    connection_manager_.stop_all();
+}
+
 };
 };
 
