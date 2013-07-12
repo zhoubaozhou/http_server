@@ -6,15 +6,15 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include "request.h"
 #include "reply.h"
 #include "request_handler.h"
 #include "request_parser.h"
 
-
-class connection_manager;
-
 namespace http {
 namespace server {
+
+class connection_manager;
 
 class connection
     : public boost::enable_shared_from_this<connection>,
@@ -46,7 +46,7 @@ private:
 
     request request_;
 
-    request_handler request_handler_;
+    request_parser request_parser_;
 
     reply reply_;
 };
@@ -55,6 +55,5 @@ typedef boost::shared_ptr<connection> connection_ptr;
 
 };
 };
-
 
 #endif

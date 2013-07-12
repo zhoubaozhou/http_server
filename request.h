@@ -1,6 +1,9 @@
 #ifndef HTTP_REQUEST_H
 #define HTTP_REQUEST_H
 
+#include <string>
+#include <vector>
+#include "header.h"
 
 namespace http {
 namespace server {

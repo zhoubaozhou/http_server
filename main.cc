@@ -4,7 +4,7 @@
 #include <boost/bind.hpp>
 #include "server.h"
 
-int main(int argc, char* argv)
+int main(int argc, char* argv[])
 {
     try {
         if (4 != argc) {

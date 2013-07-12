@@ -9,11 +9,11 @@ namespace server {
 
 struct request;
 
-class request_handler
+class request_parser
 {
 public:
     // Construct ready to parse the request method.
-    request_handler();
+    request_parser();
 
     // Reset to initial parser state.
     void reset();
@@ -22,8 +22,7 @@ public:
     boost::tuple<boost::tribool, InputIterator> 
             parse(request& req, 
                   InputIterator begin, 
-                  InputIterator end);
-
+                  InputIterator end)
     {
         while (begin != end) {
             boost::tribool result = consume(req, *begin++);

@@ -1,4 +1,4 @@
-#include "connecion.h"
+#include "connection.h"
 #include <vector>
 #include <boost/bind.hpp>
 #include "connection_manager.h"
@@ -7,7 +7,7 @@
 namespace http {
 namespace server {
 
-connecion::connecion(boost:asio::io_service& io_service,
+connection::connection(boost::asio::io_service& io_service,
         connection_manager& manager, request_handler& handler)
     : socket_(io_service),
       connection_manager_(manager),
@@ -23,17 +23,17 @@ boost::asio::ip::tcp::socket& connection::socket()
 void connection::start()
 {
     socket_.async_read_some(boost::asio::buffer(buffer_),
-            boost::bind(&connecion::handle_read, shared_from_this(),
+            boost::bind(&connection::handle_read, shared_from_this(),
                 boost::asio::placeholders::error,
                 boost::asio::placeholders::bytes_transferred));
 }
 
-void connecion::stop()
+void connection::stop()
 {
     socket_.close();
 }
 
-void connecion::handle_read(const boost::system::error_code& error,
+void connection::handle_read(const boost::system::error_code& error,
         std::size_t bytes_transferred)
 {
     if (!error) {
@@ -44,7 +44,7 @@ void connecion::handle_read(const boost::system::error_code& error,
         if (result) {
             request_handler_.handle_request(request_, reply_);
             boost::asio::async_write(socket_, reply_.to_buffers(), 
-                    boost::bind(&connecion::handle_write, shared_from_this(),
+                    boost::bind(&connection::handle_write, shared_from_this(),
                         boost::asio::placeholders::error));
         } else if (!result) {
             reply_ = reply::stock_reply(reply::bad_request);
@@ -54,7 +54,7 @@ void connecion::handle_read(const boost::system::error_code& error,
         } else {
             // 还有数据未读完，继续
             socket_.async_read_some(boost::asio::buffer(buffer_),
-                    boost::bind(&connecion::handle_read, shared_from_this(),
+                    boost::bind(&connection::handle_read, shared_from_this(),
                         boost::asio::placeholders::error, 
                         boost::asio::placeholders::bytes_transferred));
         }
@@ -64,7 +64,7 @@ void connecion::handle_read(const boost::system::error_code& error,
     }
 }
 
-void connecion::handle_write(const boost::system::error_code& error)
+void connection::handle_write(const boost::system::error_code& error)
 {
     if (!error) {
         boost::system::error_code ignored_error_code;

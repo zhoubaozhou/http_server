@@ -58,7 +58,7 @@ void request_handler::handle_request(const request& req, reply& rep)
     rep.headers[0].name = "Content-Length";
     rep.headers[0].value = boost::lexical_cast<std::string>(rep.content.size());
     rep.headers[1].name = "Content-Type";
-    rep.headers[1].value = mine_types::extension_to_type(extension);
+    rep.headers[1].value = mime_types::extension_to_type(extension);
 } 
 
 bool request_handler::url_decode(const std::string& in, std::string& out)

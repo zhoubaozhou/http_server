@@ -61,7 +61,7 @@ boost::tribool request_parser::consume(request& req, char input)
         }
     case http_version_t_2:
         if ('T' == input) {
-            state_ = http_version_t_p;
+            state_ = http_version_p;
             return boost::indeterminate;
         } else {
             return false;
@@ -188,7 +188,7 @@ boost::tribool request_parser::consume(request& req, char input)
             return false;
         }
     case expecting_newline_3:
-        return ('\n' == input)
+        return ('\n' == input);
     default:
         return false;
     }
@@ -201,7 +201,7 @@ bool request_parser::is_char(int c)
 
 bool request_parser::is_ctl(int c)
 {
-    return (c >= 0 && c <= 31) || (127 == c)
+    return (c >= 0 && c <= 31) || (127 == c);
 }
 
 bool request_parser::is_tspecial(int c)
